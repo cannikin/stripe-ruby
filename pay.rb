@@ -3,6 +3,8 @@ require 'rest_client'
 require 'json'
 
 module DevPayments
+  VERSION = '1.0'
+  
   class Client
     DEVPAY_API = 'https://api.devpayments.com/api'
     DEVPAY_PAGE_ROOT = 'https://devpayments.com/pay'
