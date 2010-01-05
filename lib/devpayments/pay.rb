@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'rest_client'
 require 'json'
+require 'ostruct'
 
 module DevPayments
   class Client
