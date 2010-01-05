@@ -12,11 +12,11 @@ module DevPayments
       @key = key
     end
 
-    def prepare_charge(amt, url, extra={})
+    def prepare_charge(amt, extra={})
       req({
         :amount => amt,
         :currency => 'usd',
-        :url => url,
+        :url => '',
         :extra => JSON.dump(extra),
         :method => 'prepare_charge'
       })
@@ -33,7 +33,7 @@ module DevPayments
     end
 
     def execute_charge(c, ccdets)
-      r = req({
+      req({
         :charge => c,
         :card => ccdets,
         :method => 'execute_charge'
@@ -54,7 +54,7 @@ module DevPayments
       unless(resp['success'])
         e = resp['error']
         msg = e ? e : 'Unknown error'
-        Error.new(msg).raise
+        raise Error.new(msg)
       end
 
       resp['resp']
