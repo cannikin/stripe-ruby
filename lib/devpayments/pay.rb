@@ -40,6 +40,10 @@ module DevPayments
         :method => 'execute_charge'
       })
     end
+    
+    def refund_charge(c)
+      req({:charge => c, :method => 'credit_charge'})
+    end
 
     private
     def req(params)
