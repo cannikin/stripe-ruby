@@ -4,8 +4,8 @@ require 'json'
 
 module DevPayments
   class Client
-    DCC_API = 'http://localhost:6000/api'
-    DCC_PAGE_ROOT = 'http://collison.ie:4600/pay'
+    DEVPAY_API = 'https://api.devpayments.com/api'
+    DEVPAY_PAGE_ROOT = 'https://devpayments.com/pay'
 
     def initialize(token, key)
       @token = token
@@ -48,7 +48,7 @@ module DevPayments
         :sig => ''
       })
 
-      d = RestClient.post(DCC_API, params)
+      d = RestClient.post(DEVPAY_API, params)
       resp = JSON.load(d)
 
       unless(resp['success'])
