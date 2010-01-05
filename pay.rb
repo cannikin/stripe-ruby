@@ -2,9 +2,9 @@ require 'rubygems'
 require 'rest_client'
 require 'json'
 
-module DevCC
+module DevPayments
   class Client
-    DCC_API = 'http://localhost:4567/api'
+    DCC_API = 'http://localhost:6000/api'
     DCC_PAGE_ROOT = 'http://collison.ie:4600/pay'
 
     def initialize(token, key)
