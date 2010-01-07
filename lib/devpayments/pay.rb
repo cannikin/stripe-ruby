@@ -8,8 +8,7 @@ module DevPayments
     DEVPAY_API = 'https://api.devpayments.com/api'
     DEVPAY_PAGE_ROOT = 'https://devpayments.com/pay'
 
-    def initialize(token, key)
-      @token = token
+    def initialize(key)
       @key = key
     end
 
@@ -49,7 +48,6 @@ module DevPayments
     def req(params)
       params = params.merge({
         :key => @key,
-        :token => @token,
         :sig => ''
       })
 
@@ -68,7 +66,7 @@ module DevPayments
 
   class Error < RuntimeError; end
 
-  def self.client(token, key)
-    Client.new(token, key)
+  def self.client(key)
+    Client.new(key)
   end
 end
