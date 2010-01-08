@@ -16,7 +16,7 @@ module DevPayments
       req({
         :amount => amt,
         :currency => 'usd',
-        :url => '',
+        :url => extra[:url] ? extra[:url] : '',
         :extra => JSON.dump(extra),
         :method => 'prepare_charge'
       })
