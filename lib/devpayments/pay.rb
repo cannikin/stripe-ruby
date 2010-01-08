@@ -1,3 +1,5 @@
+# API spec at https://github.com/devpayments/pay-server/wikis/api-docs
+
 require 'rubygems'
 require 'rest_client'
 require 'json'
@@ -59,20 +61,28 @@ module DevPayments
     end
     
     def execute(opts)
-      requires!(opts, :charge, :card)
+      requires!(opts, :card)
+      unless opts[:charge] or opts[:amount]
+        raise ArgumentError.new("Missing parameters: execute() requires either :charge (charge token) or :amount.")
+      end
       
-      r = req(opts.merge({
+      opts = {
+        # will be overrided by opts
+        :currency => 'usd'
+      }.merge(opts).merge({
+        # will override opts
         :method => 'execute_charge'
-      }))
+      })
       
+      r = req(opts)
       OpenStruct.new(r)
     end
     
-    def credit(opts)
+    def refund(opts)
       requires!(opts, :charge)
       
       r = req(opts.merge({
-        :method => 'credit_charge'
+        :method => 'refund_charge'
       }))
       
       OpenStruct.new(r)
