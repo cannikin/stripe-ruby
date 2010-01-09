@@ -66,7 +66,7 @@ module DevPayments
         raise ArgumentError.new("Missing parameters: execute() requires either :charge (charge token) or :amount.")
       end
       
-      opts.merge({
+      opts = opts.merge({
         # will override opts
         :method => 'execute_charge'
       })
