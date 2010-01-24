@@ -30,13 +30,7 @@ module DevPayments
     def prepare(opts)
       requires!(opts, :amount)
       
-      opts = {
-        # defaults you can over-ride...
-        :currency => 'usd'
-      }.merge(opts).merge({
-        # and defaults you can't...
-        :method => 'prepare_charge'
-      })
+      opts.merge({:method => 'prepare_charge'})
       
       if opts[:extra]      
         opts[:extra] = JSON.dump(opts[:extra])
