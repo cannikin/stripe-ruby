@@ -30,7 +30,7 @@ module DevPayments
     def prepare(opts)
       requires!(opts, :amount)
       
-      opts.merge({:method => 'prepare_charge'})
+      opts.merge!({:method => 'prepare_charge'})
       
       if opts[:extra]      
         opts[:extra] = JSON.dump(opts[:extra])
