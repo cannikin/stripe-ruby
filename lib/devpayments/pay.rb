@@ -78,6 +78,17 @@ module DevPayments
       
       OpenStruct.new(r)
     end
+    
+    def set_customer_card(opts)
+      requires!(opts, :customer, :card)
+      
+      opts = opts.merge({
+        :method => 'set_customer_card'
+      })
+      
+      r = req(opts)
+      OpenStruct.new(r)
+    end
 
     private
     def req(params)
