@@ -37,7 +37,6 @@ module DevPayments
       end
             
       r = req(opts)
-      
       OpenStruct.new(r)
     end
 
@@ -60,7 +59,7 @@ module DevPayments
         raise ArgumentError.new("Missing parameters: execute() requires either :charge (charge token) or :amount.")
       end
       
-      opts = opts.merge({
+      opts.merge!({
         # will override opts
         :method => 'execute_charge'
       })
@@ -72,17 +71,18 @@ module DevPayments
     def refund(opts)
       requires!(opts, :charge)
       
-      r = req(opts.merge({
+      opts.merge!({
         :method => 'refund_charge'
-      }))
+      })
       
+      r = req(opts)
       OpenStruct.new(r)
     end
     
     def set_customer_card(opts)
       requires!(opts, :customer, :card)
       
-      opts = opts.merge({
+      opts.merge!({
         :method => 'set_customer_card'
       })
       
