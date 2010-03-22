@@ -13,7 +13,7 @@ Hoe.plugin :newgem
 $hoe = Hoe.spec 'devpayments' do
   self.developer '/dev/payments', 'info@devpayments.com'
   self.rubyforge_name       = self.name
-  self.extra_deps           = [['json','>= 1.1.0'], ['rest-client', '>= 1.0.3']]
+  self.extra_deps           = [['json','>= 1.1.0'], ['rest-client', '>= 1.4.1']]
 end
 
 require 'newgem/tasks'

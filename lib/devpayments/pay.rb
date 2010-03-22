@@ -97,7 +97,7 @@ module DevPayments
       })
 
       d = RestClient.post(DEVPAY_API, params)
-      resp = JSON.load(d)
+      resp = JSON.load(d.body)
 
       unless(resp['success'])
         e = resp['error']
