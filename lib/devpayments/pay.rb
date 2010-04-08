@@ -91,9 +91,9 @@ module DevPayments
       OpenStruct.new(req(opts))
     end
     
-    def charge_customer(opts)
+    def bill_customer(opts)
       requires!(opts, :customer, :amount)
-      opts.merge!({:method => 'charge_customer'})      
+      opts.merge!({:method => 'bill_customer'})      
       OpenStruct.new(req(opts))
     end
     
