@@ -78,17 +78,30 @@ module DevPayments
       r = req(opts)
       OpenStruct.new(r)
     end
-    
-    def set_customer_card(opts)
+        
+    def create_customer(opts)
       requires!(opts, :customer, :card)
-      
-      opts.merge!({
-        :method => 'set_customer_card'
-      })
-      
-      r = req(opts)
-      OpenStruct.new(r)
+      opts.merge!({:method => 'create_customer'})      
+      OpenStruct.new(req(opts))
     end
+    
+    def update_customer(opts)
+      requires!(opts, :customer, :card)
+      opts.merge!({:method => 'update_customer'})      
+      OpenStruct.new(req(opts))
+    end
+    
+    def charge_customer(opts)
+      requires!(opts, :customer, :amount)
+      opts.merge!({:method => 'charge_customer'})      
+      OpenStruct.new(req(opts))
+    end
+    
+    def retrieve_customer(opts)
+      requires!(opts, :customer)      
+      opts.merge!({:method => 'retrieve_customer'})      
+      OpenStruct.new(req(opts))
+    end    
 
     private
     def req(params)
