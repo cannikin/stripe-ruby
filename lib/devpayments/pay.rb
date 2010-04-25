@@ -78,7 +78,7 @@ module DevPayments
       r = req(opts)
       OpenStruct.new(r)
     end
-    
+        
     def create_customer(opts)
       requires!(opts, :customer)
       r = req(opts.merge!(:method => 'create_customer'))
@@ -110,7 +110,7 @@ module DevPayments
       })
 
       d = RestClient.post(DEVPAY_API, params)
-      resp = JSON.load(d)
+      resp = JSON.load(d.body)
 
       unless(resp['success'])
         e = resp['error']
