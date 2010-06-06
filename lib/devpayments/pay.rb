@@ -91,6 +91,12 @@ module DevPayments
       OpenStruct.new(r)
     end
     
+    def set_customer_subscription(opts)
+      requires!(opts, :customer, :amount, :per)
+      r = req(opts.merge(:method => 'set_customer_subscription'))
+      OpenStruct.new(r)
+    end
+    
     def bill_customer(opts)
       requires!(opts, :customer, :amount)
       r = req(opts.merge(:method => 'bill_customer'))
@@ -106,7 +112,12 @@ module DevPayments
     private
     def req(params)
       params = params.merge({
-        :key => @key
+        :key => @key,
+        :client => {
+          :type => 'binding',
+          :language => 'ruby',
+          :version => '1.2'
+        }
       })
 
       d = RestClient.post(DEVPAY_API, params)

@@ -1,3 +1,13 @@
+=== 1.2 2010-06-06
+
+* 1 major enhancement:
+  * Support for the set_customer_subscription API method
+  
+=== 1.1 2010-03-14
+
+* 1 major enhancement:
+  * Support for recurring billing
+
 === 1.0 2010-01-05
 
 * 1 major enhancement:
