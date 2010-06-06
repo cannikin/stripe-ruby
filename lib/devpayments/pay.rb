@@ -109,6 +109,11 @@ module DevPayments
       OpenStruct.new(r)
     end
     
+    def delete_customer(opts)
+      requires!(opts, :customer)
+      r = req(opts.merge(:method => 'delete_customer'))      
+    end
+    
     private
     def req(params)
       params = params.merge({

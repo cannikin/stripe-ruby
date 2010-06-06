@@ -1,7 +1,7 @@
 === 1.2 2010-06-06
 
 * 1 major enhancement:
-  * Support for the set_customer_subscription API method
+  * Support for the set_customer_subscription and delete_customer API methods
   
 === 1.1 2010-03-14
 
