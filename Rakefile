@@ -11,10 +11,10 @@ Hoe.plugin :newgem
 # Generate all the Rake tasks
 # Run 'rake -T' to see list of generated tasks (from gem root directory)
 $hoe = Hoe.spec 'devpayments' do
-  self.version = '1.2'
+  self.version = '1.2.1'
   self.developer '/dev/payments', 'info@devpayments.com'
   self.rubyforge_name       = self.name
-  self.extra_deps           = [['json','>= 1.1.0'], ['rest-client', '>= 1.4.1']]
+  self.extra_deps           = [['json','>= 1.4.0'], ['rest-client', '>= 1.4.1']]
 end
 
 require 'newgem/tasks'
