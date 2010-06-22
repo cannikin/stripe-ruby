@@ -25,6 +25,7 @@ module DevPayments
 
     def initialize(key)
       @key = key
+      @version = loaded_version
     end
 
     def prepare(opts)
@@ -115,13 +116,18 @@ module DevPayments
     end
     
     private
+    def loaded_version
+      version_file = File.join(File.dirname(__FILE__), '../../VERSION')
+      File.exists?(version_file) ? File.read(version_file).strip : 'unknown'
+    end
+    
     def req(params)
       params = params.merge({
         :key => @key,
         :client => {
           :type => 'binding',
           :language => 'ruby',
-          :version => '1.2'
+          :version => @version
         }
       })
 

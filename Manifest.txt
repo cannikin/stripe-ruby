@@ -1,5 +1,7 @@
 History.txt
 Manifest.txt
+VERSION
+LICENSE
 README.rdoc
 Rakefile
 lib/devpayments/pay.rb
