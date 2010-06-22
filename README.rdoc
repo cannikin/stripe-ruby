@@ -4,11 +4,9 @@
 
 You don't need this source code unless you want to modify the gem. If you just want to use the /dev/payments ruby bindings, you should run:
 
-  curl -o devpayments.gem http://devpayments.com/bindings/ruby/devpayments-latest.gem
-  sudo gem install rest-client json
-  sudo gem install devpayments.gem
+  sudo gem install --source http://gems.devpayments.com devpayments
 
-If you want to build the gem, first install hoe. Then do:
+If you want to build the gem from source, first install hoe. Then do:
 
   sudo rake install_gem
 
