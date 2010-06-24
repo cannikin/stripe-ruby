@@ -55,9 +55,12 @@ module DevPayments
     end
     
     def execute(opts)
-      requires!(opts, :card)
       unless opts[:charge] or opts[:amount]
         raise ArgumentError.new("Missing parameters: execute() requires either :charge (charge token) or :amount.")
+      end
+      
+      unless opts[:card] or opts[:customer]
+        raise ArgumentError.new("Missing parameters: execute() requires either :card (card hashmap) or :customer (customer token).")
       end
       
       opts.merge!({
