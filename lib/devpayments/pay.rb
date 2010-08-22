@@ -1,14 +1,25 @@
 # API spec at https://github.com/devpayments/pay-server/wikis/api-docs
-
 require 'rubygems'
 require 'rest_client'
 require 'json'
-require 'ostruct'
 
-module DevPayments
+class DevPayments
+  class Response
+    def initialize(hash)
+      @data = hash
+    end
+    
+    def method_missing(name, *args)
+      @data[name.to_s]
+    end
+    
+    def id
+      @data['id']
+    end
+  end
+  
   class Client
-    DEVPAY_API = 'https://api.devpayments.com/api'
-    DEVPAY_PAGE_ROOT = 'https://devpayments.com/pay'
+    DEVPAY_API = 'https://api.devpayments.com/v1'
     
     def requires!(hash, *params)
       params.each do |param| 
@@ -28,39 +39,22 @@ module DevPayments
       @version = loaded_version
     end
 
-    def prepare(opts)
-      requires!(opts, :amount)
-      
-      opts.merge!({:method => 'prepare_charge'})
-      
-      if opts[:extra]      
-        opts[:extra] = JSON.dump(opts[:extra])
-      end
-            
-      r = req(opts)
-      OpenStruct.new(r)
-    end
-
     def retrieve(opts)
-      requires!(opts, :charge)
+      requires!(opts, :id)
       
       r = req({
-        :charge => opts[:charge],
+        :id => opts[:id],
         :method => 'retrieve_charge'
       })
 
-      r['extra'] = JSON.load(r['extra']) if(r['extra']) 
-      
-      OpenStruct.new(r)
+      Response.new(r)
     end
     
     def execute(opts)
-      unless opts[:charge] or opts[:amount]
-        raise ArgumentError.new("Missing parameters: execute() requires either :charge (charge token) or :amount.")
-      end
+      requires!(opts, :amount, :currency)
       
       unless opts[:card] or opts[:customer]
-        raise ArgumentError.new("Missing parameters: execute() requires either :card (card hashmap) or :customer (customer token).")
+        raise ArgumentError.new("Missing parameters: execute() requires either :card (card hashmap) or :customer (customer id).")
       end
       
       opts.merge!({
@@ -69,52 +63,46 @@ module DevPayments
       })
       
       r = req(opts)
-      OpenStruct.new(r)
+      Response.new(r)
     end
     
     def refund(opts)
-      requires!(opts, :charge)
+      requires!(opts, :id)
       
       opts.merge!({
         :method => 'refund_charge'
       })
       
       r = req(opts)
-      OpenStruct.new(r)
+      Response.new(r)
     end
         
     def create_customer(opts)
-      requires!(opts, :customer)
+      requires!(opts, :id)
       r = req(opts.merge!(:method => 'create_customer'))
-      OpenStruct.new(r)
+      Response.new(r)
     end
     
     def update_customer(opts)
-      requires!(opts, :customer)
+      requires!(opts, :id)
       r = req(opts.merge(:method => 'update_customer'))
-      OpenStruct.new(r)
-    end
-    
-    def set_customer_subscription(opts)
-      requires!(opts, :customer, :amount, :per)
-      r = req(opts.merge(:method => 'set_customer_subscription'))
-      OpenStruct.new(r)
+      Response.new(r)
     end
     
     def bill_customer(opts)
-      requires!(opts, :customer, :amount)
+      requires!(opts, :id, :amount)
       r = req(opts.merge(:method => 'bill_customer'))
-      OpenStruct.new(r)
+      Response.new(r)
     end
     
     def retrieve_customer(opts)
-      requires!(opts, :customer)
+      requires!(opts, :id)
       r = req(opts.merge(:method => 'retrieve_customer'))
-      OpenStruct.new(r)
+      Response.new(r)
     end
     
     def delete_customer(opts)
-      requires!(opts, :customer)
+      requires!(opts, :id)
       r = req(opts.merge(:method => 'delete_customer'))      
     end
     
@@ -136,18 +124,28 @@ module DevPayments
 
       d = RestClient.post(DEVPAY_API, params)
       resp = JSON.load(d.body)
-
-      unless(resp['success'])
-        e = resp['error']
-        msg = e ? e : 'Unknown error'
-        raise Error.new(msg)
+      
+      if resp['error']
+        case resp['error']['type']
+        when 'card_error'
+          raise CardError.new(resp['error']['message'])
+        when 'invalid_request_error'
+          raise InvalidRequestError.new(resp['error']['message'])
+        when 'api_error'
+          raise APIError.new(resp['error']['message'])
+        else
+          raise resp['error']['message']
+        end
       end
 
-      resp['resp']
+      resp
     end
   end
 
   class Error < RuntimeError; end
+  class CardError < DevPayments::Error; end
+  class InvalidRequestError < DevPayments::Error; end
+  class APIError < DevPayments::Error; end
 
   def self.client(key)
     Client.new(key)
