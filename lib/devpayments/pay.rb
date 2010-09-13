@@ -78,7 +78,6 @@ class DevPayments
     end
         
     def create_customer(opts)
-      requires!(opts, :id)
       r = req(opts.merge!(:method => 'create_customer'))
       Response.new(r)
     end
