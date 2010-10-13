@@ -9,6 +9,31 @@ class DevPayments
       @data = hash
     end
     
+    InspectKey = :__inspect_key__
+    def inspect
+      str = "#<#{self.class}"
+
+      Thread.current[InspectKey] ||= []
+      if Thread.current[InspectKey].include?(self) then
+        str << " ..."
+      else
+        first = true
+        for k,v in @data
+          str << "," unless first
+          first = false
+
+          Thread.current[InspectKey] << v
+          begin
+            str << " #{k}=#{v.inspect}"
+          ensure
+            Thread.current[InspectKey].pop
+          end
+        end
+      end
+
+      str << ">"
+    end
+    
     def method_missing(name, *args)
       @data[name.to_s]
     end
