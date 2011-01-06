@@ -45,7 +45,7 @@ class Stripe
   end
   
   class Client
-    DEVPAY_API = 'https://api.stripe.com/v1'
+    STRIPE_API = 'https://api.stripe.com/v1'
     
     def requires!(hash, *params)
       params.each do |param| 
