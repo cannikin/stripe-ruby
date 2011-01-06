@@ -4,10 +4,10 @@ VERSION
 LICENSE
 README.rdoc
 Rakefile
-lib/devpayments/pay.rb
-lib/devpayments.rb
+lib/stripe/pay.rb
+lib/stripe.rb
 script/console
 script/destroy
 script/generate
-test/test_devpayments.rb
+test/test_stripe.rb
 test/test_helper.rb

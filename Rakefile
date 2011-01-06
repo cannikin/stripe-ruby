@@ -2,7 +2,7 @@ require 'rubygems'
 gem 'hoe', '>= 2.0.0'
 require 'hoe'
 require 'fileutils'
-require './lib/devpayments'
+require './lib/stripe'
 
 Hoe.plugin :newgem
 # Hoe.plugin :website
@@ -10,9 +10,9 @@ Hoe.plugin :newgem
 
 # Generate all the Rake tasks
 # Run 'rake -T' to see list of generated tasks (from gem root directory)
-$hoe = Hoe.spec 'devpayments' do
+$hoe = Hoe.spec 'stripe' do
   self.version = File.read(File.join(File.dirname(__FILE__), 'VERSION')).strip
-  self.developer '/dev/payments', 'info@devpayments.com'
+  self.developer 'Stripe', 'info@stripe.com'
   self.rubyforge_name       = self.name
   self.extra_deps           = [['json','>= 1.4.0'], ['rest-client', '>= 1.4.1']]
 end

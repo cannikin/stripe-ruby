@@ -1,14 +1,15 @@
-# API spec at https://github.com/devpayments/pay-server/wikis/api-docs
+# API spec at http://stripe.com/api/spec
+
 require 'rubygems'
 require 'rest_client'
 require 'json'
 
-class DevPayments
+class Stripe
   class Response
     def initialize(hash)
       @data = hash
     end
-    
+
     InspectKey = :__inspect_key__
     def inspect
       str = "#<#{self.class}"
@@ -33,7 +34,7 @@ class DevPayments
 
       str << ">"
     end
-    
+
     def method_missing(name, *args)
       @data[name.to_s]
     end
@@ -44,7 +45,7 @@ class DevPayments
   end
   
   class Client
-    DEVPAY_API = 'https://api.devpayments.com/v1'
+    DEVPAY_API = 'https://api.stripe.com/v1'
     
     def requires!(hash, *params)
       params.each do |param| 
@@ -167,9 +168,9 @@ class DevPayments
   end
 
   class Error < RuntimeError; end
-  class CardError < DevPayments::Error; end
-  class InvalidRequestError < DevPayments::Error; end
-  class APIError < DevPayments::Error; end
+  class CardError < Stripe::Error; end
+  class InvalidRequestError < Stripe::Error; end
+  class APIError < Stripe::Error; end
 
   def self.client(key)
     Client.new(key)
