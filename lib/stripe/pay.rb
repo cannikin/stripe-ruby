@@ -147,15 +147,20 @@ class Stripe
         }
       })
 
-      d = RestClient.post(DEVPAY_API, params)
+      d = RestClient.post(STRIPE_API, params)
       resp = JSON.load(d.body)
       
       if resp['error']
         case resp['error']['type']
         when 'card_error'
-          raise CardError.new(resp['error']['message'])
+          c = CardError.new(resp['error']['message'])
+          c.param = resp['error']['param']
+          c.code = resp['error']['code']
+          raise c
         when 'invalid_request_error'
-          raise InvalidRequestError.new(resp['error']['message'])
+          i = InvalidRequestError.new(resp['error']['message'])
+          i.param = resp['error']['param']
+          raise i
         when 'api_error'
           raise APIError.new(resp['error']['message'])
         else
@@ -167,9 +172,16 @@ class Stripe
     end
   end
 
-  class Error < RuntimeError; end
-  class CardError < Stripe::Error; end
-  class InvalidRequestError < Stripe::Error; end
+  class Error < StandardError; end
+  
+  class CardError < Stripe::Error
+    attr_accessor :param, :code
+  end
+  
+  class InvalidRequestError < Stripe::Error;
+    attr_accessor :param
+  end
+    
   class APIError < Stripe::Error; end
 
   def self.client(key)
