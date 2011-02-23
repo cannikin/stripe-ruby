@@ -42,6 +42,10 @@ class Stripe
     def id
       @data['id']
     end
+    
+    def to_json
+      @data.to_json
+    end
   end
   
   class Client
